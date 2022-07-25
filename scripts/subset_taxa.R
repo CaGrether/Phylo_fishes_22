@@ -8,9 +8,19 @@ library(divDyn)
 taxa <- read.csv2("data/substage_age_2021_mod.csv")
 # arrange data correctly
 names(taxa)[1] <- "taxon"
-taxa <- select(taxa, c("taxon", "max", "min", "stg"))
+taxa <- select(taxa, c("taxon", "max", "min")) #"stg"
 # omit NA value in line 49 (Eusthenopteron_foordi)
 taxa <- taxa[!is.na(taxa$max),]
+
+
+# create subsample (boring method)
+set.seed(12345)
+
+rnd <- sample(1:120, 20, replace = FALSE) #random numbers
+sub.tax <- taxa[rnd,]
+
+#write.csv2(sub.tax, "output/subtaxa_rnd.csv")
+
 
 # get stage nbrs from divDyn
 data(stages)
@@ -38,6 +48,8 @@ taxa$stg <- as.numeric(taxa$stg) #function needs numeric input
 
 
 # create subsample
-subsample(taxa, tax="taxon", bin="stg", q=20, duplicates= TRUE)
+
+################# "you have less than 3 bins"
+subsample(taxa, tax="taxon", bin="stg", q=30, duplicates= TRUE)
 cr <- subsample(taxa, tax="taxon", bin="stg", q=20, type="cr",
                 iter=200)
