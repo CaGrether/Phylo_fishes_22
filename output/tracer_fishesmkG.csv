@@ -1,0 +1,12 @@
+Summary Statistic;Posterior;Likelihood;Prior
+mean;-2604.0017;-2292.7256;-311.2761
+stderr of mean;0.1896;0.1523;0.2234
+stdev;5.5299;4.5737;6.1804
+variance;30.5803;20.9185;38.1972
+median;-2603.983;-2292.274;-311.1024
+value range;[-2629.712, -2588.944];[-2311.779, -2281.755];[-333.1382, -289.6936]
+geometric mean;n/a;n/a;n/a
+95% HPD interval;[-2614.395, -2593.352];[-2301.608, -2284.471];[-323.6083, -299.4879]
+auto-correlation time (ACT);1059.9277;1000;1179.0049
+effective sample size (ESS);850.1;901;764.2
+number of samples;901;901;901

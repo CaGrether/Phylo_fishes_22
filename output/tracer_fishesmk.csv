@@ -1,0 +1,12 @@
+Summary Statistic;Posterior;Likelihood;Prior;
+mean | mode;-2590.1715;-2292.601;-297.5705;
+stderr of mean | mode frequency;0.264;0.1736;0.4628;
+stdev | mode probability;5.1981;4.4325;6.144;
+variance;27.0205;19.6471;37.749;
+median;-2589.983;-2292.112;-297.5383;
+value range | unique values;[-2612.423, -2575.706];[-2307.441, -2283.015];[-318.01, -280.1304];
+geometric mean | 95% credible set;n/a;n/a;n/a;
+95% HPD interval | 5% non-credible set;[-2600.361, -2580.436];[-2301.13, -2284.414];[-310.0154, -286.4317];
+auto-correlation time (ACT);2327.4512;1384.0394;5118.528;
+effective sample size (ESS);387.1;651;176;
+number of samples;901;901;901;
