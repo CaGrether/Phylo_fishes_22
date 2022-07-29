@@ -1,0 +1,74 @@
+							
+###############
+# Mkv+G model #
+###############
+
+
+
+
+
+##############
+# Tree model #
+##############
+
+# Set up branch length prior
+#br_len_lambda <- 10 
+
+# Define the tree parameter.
+# First, we generate the topology.
+# We assume a uniform prior on topology.
+#phylogeny ~ dnUniformTopologyBranchLength(taxa, branchLengthDistribution=dnExponential(br_len_lambda)) 
+
+# compute the tree length from the phylogeny
+#tree_length := phylogeny.treeLength()
+
+#moves.append( mvNNI(phylogeny, weight=num_branches/2.0) )
+#moves.append( mvSPR(phylogeny, weight=num_branches/10.0) )
+#moves.append( mvBranchLengthScale(phylogeny, weight=num_branches) )
+
+
+######################
+# Substitution Model #
+######################
+
+#### specify the Jukes-Cantor substitution model applied uniformly to all sites ###
+Q := fnJC(5) 
+
+
+####################################
+# Gamma-distributed rate variation #
+####################################
+
+# Set up Gamma-distributed rate variation.
+alpha_morpho ~ dnUniform( 0.0, 1E6 )
+rates_morpho := fnDiscretizeGamma( alpha_morpho, alpha_morpho, 6 )
+
+# Moves on the parameters to the Gamma distribution.
+moves.append( mvScale(alpha_morpho,lambda=1, weight=2.0) )
+
+
+###################
+# PhyloCTMC Model #
+###################
+
+
+# the sequence evolution model
+seq ~ dnPhyloCTMC(tree=tree, siteRates=rates_morpho, Q=Q, type="Standard", branchRates = branch_rates )
+
+# attach the data
+seq.clamp(stages) 
+
+
+
+
+#############
+# THE Model #
+#############
+
+# We define our model.
+# We can use any node of our model as a handle, here we chose to use the rate matrix.
+#mymodel = model(phylogeny)
+
+
+
+

@@ -1,0 +1,6 @@
+# strict clock model
+
+# rate of character change (assumed to be constant)
+branch_rates ~ dnExponential(10.0)
+
+moves.append( mvScale(branch_rates, lambda = 0.5, tune = true, weight = 3.0) )

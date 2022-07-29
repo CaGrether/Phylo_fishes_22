@@ -1,0 +1,34 @@
+# main.Rev
+# set working directory
+# setwd(".")
+# setwd("Documents\\Uni_Erlangen\\Studium\\MSc_2\\Phylogenetics\\ProjectP")
+
+taxa <- readTaxonData("data/substage_age_2021_mod.tsv")
+stages <- readDiscreteCharacterData("data/Dataset_S4_Giles_et_al_Chadakoin_FBD.txt")
+
+num_taxa <- stages.ntaxa() # number of taxa
+num_branches <- 2 * num_taxa - 2 # number of branches in an rooted tree
+
+# variables for MCMC
+moves    = VectorMoves()
+monitors = VectorMonitors()
+
+### start with models
+# tree model
+source("scripts/FBD_dating.Rev")
+# clock model
+source("scripts/strict_clock.Rev")
+# substitution model
+source("scripts/mk+G_Model.Rev")
+
+# parameters printed to file
+monitors.append( mnModel(filename = "output/fishes_FBD_mkG.log", printgen = 1000, exclude = ["F"]) )
+# trees printed to file
+monitors.append( mnFile(filename = "output/fishes_FBD_mkG.trees", printgen = 1000, tree) )
+# parameter values printed to screen during the MCMC
+monitors.append( mnScreen(printgen = 1000,  num_samp_anc, origin_time) )
+
+
+mymodel = model(tree)
+mymcmc = mcmc(mymodel, monitors, moves)
+mymcmc.run(generations = 1000000, tuningInterval = 1000)

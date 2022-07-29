@@ -1,0 +1,55 @@
+# FBD_dating.Rev
+
+# parameters for FBD model
+speciation_rate ~ dnExponential(10)
+extinction_rate ~ dnExponential(10)
+fossil_samp_rate ~ dnExponential(10)
+
+# moves of parameters
+moves.append( mvScale(speciation_rate, lambda = 0.5, tune = true, weight = 3.0) )
+moves.append( mvScale(extinction_rate, lambda = 0.5, tune = true, weight = 3.0) )
+moves.append( mvScale(fossil_samp_rate, lambda = 0.5, tune = true, weight = 3.0) )
+
+diversification := speciation_rate - extinction_rate
+turnover := extinction_rate/speciation_rate
+
+# probability of extant species sampling
+rho <- 0.008 #revise this: we have 8 extant species in the dataset out of 121 taxa, 6%. Actually now 1/121
+
+# prior and move on the origin
+origin_time ~ dnUnif(420.0, 540.0) # more like dnUnif(450, 540)
+moves.append( mvSlide(origin_time, weight=1.0) ) # Which nbrs for fishes?
+
+tree ~ dnFBDRP(lambda = speciation_rate, mu = extinction_rate, psi = fossil_samp_rate, rho = rho, originAge = origin_time, taxa = taxa)
+
+# moves to search tree space
+moves.append( mvFNPR(tree, weight = 15.0) )
+moves.append( mvCollapseExpandFossilBranch(tree, origin_time, weight = 6.0) )
+moves.append( mvNodeTimeSlideUniform(tree, weight = 40.0) )
+moves.append( mvRootTimeSlideUniform(tree, origin_time, weight = 5.0) )
+
+# monitor specific clades (for bears)
+#clade_extant = clade("Ailuropoda_melanoleuca","Tremarctos_ornatus","Melursus_ursinus",
+ #                   "Ursus_arctos","Ursus_maritimus","Helarctos_malayanus",
+ #                   "Ursus_americanus","Ursus_thibetanus")
+#age_extant := tmrca(tree, clade_extant)
+
+# nbr of sampled ancestors in posterior
+num_samp_anc := tree.numSampledAncestors()
+
+# acccounting for fossil age uncertainty
+#fossils = tree.getFossils()
+
+#for(i in 1:fossils.size())
+#{
+#    t[i] := tmrca(tree, clade(fossils[i]))
+
+#    a_i = fossils[i].getMinAge()
+#    b_i = fossils[i].getMaxAge()
+
+#    F[i] ~ dnUniform(t[i] - b_i, t[i] - a_i)
+#    F[i].clamp( 0 )
+#}
+
+# moves on fossil ages
+#moves.append( mvFossilTimeSlideUniform(tree, origin_time, weight = 5.0) )
